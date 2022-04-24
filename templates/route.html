@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Plan B</title>
+    <link href="/static/skeleton.css" rel="stylesheet">
+    <style>
+        .disabled {
+            background-color: #555555 !important;
+            border-color: #555555 !important;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="row">
+        <div class="six columns">
+            <label>PlanB</label>
+        </div>
+        <div class="six columns" style="text-align: right">
+            <label>About</label>
+        </div>
+        <hr style="width: 100% ; color: #333333; margin:unset">
+    </div>
+
+    <form id="form" method="post" action="/" style="margin: 2em ; margin-inside: 9em">
+        <div class="row">
+            <label style="padding-bottom: 3em">
+                Welcome {{ name }}, your current card balance is {{ bal }}.
+            </label>
+        </div>
+
+        <div class="u-full-width">
+            <label for="kav"> Which bus would you like to take?
+                <div class="row"><input class="one-third column input-field" id="kav" name="kav" type="text"></div>
+            </label>
+        </div>
+
+        <div class="u-full-width">
+            <label for="current_stop"> From?
+                <div class="row"><input class="one-third column input-field" id="current_stop" name="current_stop" type="text"></div>
+            </label>
+        </div>
+
+        <div class="u-full-width">
+            <label for="exit_stop"> To?
+                <div class="row"><input class="one-third column input-field" id="exit_stop" name="exit_stop" type="text"></div>
+            </label>
+        </div>
+        <input class="button-primary disabled" type="submit" id="submitButton" name="submitButton" value="Let's Ride">
+
+    </form>
+    <script src="/static/passengerScripts.js"></script>
+</div>
+</body>
+</html>

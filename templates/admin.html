@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Plan B</title>
+    <link href="/static/skeleton.css" rel="stylesheet">
+    <style>
+        .disabled {
+            background-color: #555555 !important;
+            border-color: #555555 !important;
+        }
+    </style>
+</head>
+<body>
+<div class="row">
+    <div class="six columns">
+        <label>PlanB</label>
+    </div>
+    <div class="six columns" style="text-align: right">
+        <label>About</label>
+    </div>
+    <hr style="width: 100% ; color: #333333; margin:unset">
+</div>
+
+<div class="container">
+    <form id="form" method="post" action="/admin" style="margin: 2em ; margin-inside: 9em">
+        <div class="row">
+            <label style="padding-bottom: 3em">
+                Welcome admin,<br>
+                To create a new bus route, please input the route # and add the stops (minimum 2 stops).
+            </label>
+        </div>
+
+        <div class="u-full-width" id="inputs_div">
+            <label for="kav"> New bus route #:
+                <div class="row"><input class="two columns input-field" id="routeNum" name="route_num" type="text"></div>
+            </label>
+            <div class="row">
+                <label for="stop1" style="float:left">Stop #1:</label><input class="three columns input-field" type="text" id="stop1" name="stop1">
+            </div>
+            <div class="row">
+                <label for="stop2" style="float:left">Stop #2:</label><input class="three columns input-field" type="text" id="stop2" name="stop2">
+            </div>
+        </div>
+
+
+        <input class="button-primary" type="button" id="addStop" name="add_stop" value="Add Stop">
+        <input class="button-primary disabled" type="submit" id="submitButton" name="submitButton" value="Submit">
+
+    </form>
+</div>
+
+<script src="/static/passengerScripts.js"></script>
+<script>
+    const inputs = document.getElementById("inputs_div")
+    const addField = document.getElementById("addStop")
+
+    addField.onclick = (e)=>{
+
+        let lastID = inputs.lastElementChild.lastElementChild.id
+        const nextID = parseInt(lastID.charAt(lastID.length-1))+1
+
+        const newDiv = document.createElement('div')
+        newDiv.setAttribute('class','row')
+
+        const newLabel = document.createElement('Label')
+        newLabel.setAttribute('for','stop'+nextID)
+        newLabel.setAttribute('style','float:left')
+        newLabel.innerHTML = 'Stop #'+nextID+':'
+
+
+
+        let newField = document.createElement('input')
+        newField.setAttribute('class','three columns input-field')
+        newField.setAttribute('type','text')
+        newField.setAttribute('id','stop'+nextID)
+        newField.setAttribute('name','stop'+nextID)
+
+
+        newDiv.appendChild(newLabel)
+        newDiv.appendChild(newField)
+
+        inputs.appendChild(newDiv)
+    }
+</script>
+
+</body>
+</html>

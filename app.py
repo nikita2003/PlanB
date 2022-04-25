@@ -1,11 +1,21 @@
 from flask import Flask, request, render_template
 from pymongo import MongoClient
-
-client = MongoClient(port=27017)
-passengers = client.passengers
-drivers = client.drivers
+from pymongo.errors import ConnectionFailure
 
 app = Flask(__name__, template_folder="templates")
+
+MONGO_CONNECTION = MongoClient("mongodb+srv://Becker2103:nikita03@planb.0gsad.mongodb.net/<COLLECTION>?ssl=true&ssl_cert_reqs=CERT_NONE",
+                               serverSelectionTimeoutMS=1000)
+
+
+MONGO_CONNECTION.server_info()
+
+# Check if mongo is connected
+# try:
+#     MONGO_CONNECTION.admin.command('ismaster')
+# except ConnectionFailure:
+#     print("MongoDB server is not available")
+#     exit()
 
 
 @app.route('/', methods=["GET", "POST"])
@@ -47,16 +57,18 @@ def admin():
     if request.method == "POST":
         req = request.form
 
-        print(req)
-
         data = req.to_dict()
-        new_route = {"RouteNumber": data['route_num']}
+        new_route = {"Route info": {"Route number": data['route_num'],
+                                    'Current amount of passengers': 0}}
 
         data.pop('route_num')
         data.pop('submitButton')
 
-        for stop in data:
-            pass
+        for stop_number, stop_name in data.items():
+            new_stop = {"Stop name": stop_name, "Passangers waiting": 0}
+            new_route[stop_number] = new_stop
+
+        print(new_route)
 
     return render_template("admin.html")
 

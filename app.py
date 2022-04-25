@@ -1,10 +1,11 @@
 from flask import Flask, request, render_template
+
 from pymongo import MongoClient
 from pymongo.errors import ConnectionFailure
+from mongo import MONGO_CONN_STR
 
 app = Flask(__name__, template_folder="templates")
 
-MONGO_CONN_STR = "mongodb://Becker2103:nikita03@planb-shard-00-00.0gsad.mongodb.net:27017,planb-shard-00-01.0gsad.mongodb.net:27017,planb-shard-00-02.0gsad.mongodb.net:27017/?ssl=true&replicaSet=atlas-fqu4pa-shard-0&authSource=admin&retryWrites=true&w=majority"
 MONGO_CONNECTION = MongoClient(MONGO_CONN_STR, serverSelectionTimeoutMS=5000)
 
 try:

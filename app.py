@@ -1,21 +1,17 @@
 from flask import Flask, request, render_template
+
 from pymongo import MongoClient
 from pymongo.errors import ConnectionFailure
+from mongo import MONGO_CONN_STR
 
 app = Flask(__name__, template_folder="templates")
 
-MONGO_CONNECTION = MongoClient("mongodb+srv://Becker2103:nikita03@planb.0gsad.mongodb.net/<COLLECTION>?ssl=true&ssl_cert_reqs=CERT_NONE",
-                               serverSelectionTimeoutMS=1000)
+MONGO_CONNECTION = MongoClient(MONGO_CONN_STR, serverSelectionTimeoutMS=5000)
 
-
-MONGO_CONNECTION.server_info()
-
-# Check if mongo is connected
-# try:
-#     MONGO_CONNECTION.admin.command('ismaster')
-# except ConnectionFailure:
-#     print("MongoDB server is not available")
-#     exit()
+try:
+    MONGO_CONNECTION.admin.command('ismaster')
+except ConnectionFailure:
+    print("Couldn't connect to Mongo")
 
 
 @app.route('/', methods=["GET", "POST"])

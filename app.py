@@ -1,7 +1,7 @@
 from flask import Flask, request, render_template
 
 from pymongo import MongoClient
-from pymongo.errors import ConnectionFailure
+from pymongo.errors import ConnectionFailure, CollectionInvalid
 from mongo import MONGO_CONN_STR
 
 app = Flask(__name__, template_folder="templates")
@@ -13,6 +13,8 @@ try:
 except ConnectionFailure:
     print("Couldn't connect to Mongo")
 
+routes_db = MONGO_CONNECTION["Routes"]
+
 
 @app.route('/', methods=["GET", "POST"])
 def routes():
@@ -22,8 +24,16 @@ def routes():
         print(req)
 
         data_input = {"kav": req["kav"], "current_stop": req["current_stop"], "exit_stop": req["exit_stop"]}
-        print(data_input)
 
+        route_num = data_input["kav"]
+
+        try:
+            route = routes_db.get_collection(route_num)
+        except CollectionInvalid:
+            print("no such route")
+        else:
+            passenger_amount = route.find_one({"Stop name" : data_input["current_stop"]})["Passangers waiting"]
+            route.find_one_and_update({"Stop name" : data_input["current_stop"]}, {"Passangers waiting": passenger_amount+1})
         return render_template("route.html")
 
     try:
@@ -54,17 +64,24 @@ def admin():
         req = request.form
 
         data = req.to_dict()
-        new_route = {"Route info": {"Route number": data['route_num'],
-                                    'Current amount of passengers': 0}}
+        new_route_info = {"Route number": data['route_num'],
+                          "Current amount of passengers": 0}
 
-        data.pop('route_num')
+        route_number = data.pop('route_num')
         data.pop('submitButton')
+
+        new_route_collection = routes_db[route_number]
+        new_route_data = [new_route_info]
 
         for stop_number, stop_name in data.items():
             new_stop = {"Stop name": stop_name, "Passangers waiting": 0}
-            new_route[stop_number] = new_stop
+            new_route_data.append(new_stop)
 
-        print(new_route)
+        # print(new_route_data)
+
+        db_insertion = new_route_collection.insert_many(new_route_data)
+
+        print(db_insertion)
 
     return render_template("admin.html")
 

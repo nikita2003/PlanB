@@ -38,18 +38,23 @@
 
         <div class="u-full-width">
             <label for="current_stop"> From?
-                <div class="row"><input class="one-third column input-field" id="current_stop" name="current_stop" type="text"></div>
+                <div class="row"><input list="stops" class="one-third column input-field" id="current_stop"
+                                        name="current_stop" type="text"></div>
             </label>
         </div>
 
         <div class="u-full-width">
             <label for="exit_stop"> To?
-                <div class="row"><input class="one-third column input-field" id="exit_stop" name="exit_stop" type="text"></div>
+                <div class="row"><input list="stops" class="one-third column input-field" id="exit_stop"
+                                        name="exit_stop" type="text"></div>
             </label>
         </div>
         <input class="button-primary disabled" type="submit" id="submitButton" name="submitButton" value="Let's Ride">
 
     </form>
+    <datalist id="stops">
+
+    </datalist>
     <script src="/static/passengerScripts.js"></script>
 </div>
 </body>

@@ -1,12 +1,14 @@
-from flask import Flask, request, render_template
+from flask import Flask, request, render_template, jsonify
 
 from pymongo import MongoClient
 from pymongo.errors import ConnectionFailure, CollectionInvalid
 from mongo import MONGO_CONN_STR
+import certifi
 
+ca = certifi.where()
 app = Flask(__name__, template_folder="templates")
 
-MONGO_CONNECTION = MongoClient(MONGO_CONN_STR, serverSelectionTimeoutMS=5000)
+MONGO_CONNECTION = MongoClient(MONGO_CONN_STR, serverSelectionTimeoutMS=5000, tlsCAFile=ca)
 
 try:
     MONGO_CONNECTION.admin.command('ismaster')
@@ -56,6 +58,17 @@ def routes():
 @app.route('/nahag')
 def hey():
     return render_template("nahagos.html")
+
+
+@app.route('/getstops')
+def retrieve_bus_stops():
+    if "kav" not in request.args:
+        return jsonify([]), 500
+    kav = request.args['kav']
+    if kav.isdecimal() and kav in routes_db.list_collection_names():
+        stops = [s['Stop name'] for s in routes_db[kav].find({"Stop name": {"$exists": True}})]
+        return jsonify(stops)
+    return jsonify([]), 500
 
 
 @app.route('/admin', methods=["GET", "POST"])

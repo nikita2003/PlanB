@@ -32,7 +32,7 @@
 
         <div class="u-full-width">
             <label for="kav"> Which bus would you like to take?
-                <div class="row"><input class="one-third column input-field" id="kav" name="kav" type="text"></div>
+                <div class="row"><input list="routes" class="one-third column input-field" id="kav" name="kav" type="text"></div>
             </label>
         </div>
 
@@ -52,6 +52,9 @@
         <input class="button-primary disabled" type="submit" id="submitButton" name="submitButton" value="Let's Ride">
 
     </form>
+    <datalist id="routes">
+
+    </datalist>
     <datalist id="stops">
 
     </datalist>

@@ -4,6 +4,7 @@ const kavInput = document.getElementById('kav')
 const currentStopInput = document.getElementById('current_stop')
 const exitStopInput = document.getElementById('exit_stop')
 const stopsDataset = document.getElementById('stops')
+const routeDataset = document.getElementById('routes')
 
 const updateForm = () => {
 
@@ -17,6 +18,16 @@ const updateForm = () => {
 
 console.log(fields)
 submitBtn.disabled = true;
+
+fetch(encodeURI("/getroutes"))
+    .then(response =>response.json())
+    .then(data =>{
+        for(const route of data){
+            let listitem = document.createElement("option")
+            listitem.textContent = route
+            routeDataset.appendChild(listitem)
+        }
+    })
 
 kavInput.oninput = (e) => {
     let {isValid, formValues} = updateForm();
